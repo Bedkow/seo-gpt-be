@@ -1,18 +1,20 @@
 import { Injectable } from '@nestjs/common';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
   private users = [
     {
       id: 'xyz-123',
-      name: 'Jan Kowalski',
+      name: 'jan-kowalski',
       role: 'copywriter',
       queriesToday: 6,
       queriesTotal: 48,
     },
     {
       id: 'zzz-321',
-      name: 'Żaneta Pąkiewicz',
+      name: 'żaneta-pąkiewicz',
       role: 'administrator',
       queriesToday: 0,
       queriesTotal: 5,
@@ -22,6 +24,19 @@ export class UsersService {
   getAllUsers() {
     return this.users;
   }
+
+  // TODO -> bugged
+  // getUserByName(name: string) {
+  //   const user = this.users.find((user) => {
+  //     return user.name === name;
+  //   });
+
+  //   if (!user) {
+  //     console.log('user not found by name');
+  //   } else {
+  //     return user;
+  //   }
+  // }
 
   getUserById(userId: string) {
     const user = this.users.find((user) => {
@@ -35,16 +50,28 @@ export class UsersService {
     }
   }
 
-  getUserByName(name: string) {
-    const user = this.users.find((user) => {
-      return user.name.toLowerCase() === name.toLowerCase();
-    });
-
-    if (!user) {
-      console.log('user not found by name');
-    } else {
-      return user;
-    }
+  createUser(createUserDto: CreateUserDto) {
+    this.users.push(createUserDto);
   }
+
+  removeUser(id: string) {
+    const toBeRemoved = this.getUserById(id);
+
+    this.users = this.users.filter((user)=>{return user.id !== id});
+
+    return toBeRemoved;
+  }
+
+  updateUser(id: string, updateUserDto: UpdateUserDto ) {
+    this.users = this.users.map((user)=>{
+      if (user.id === id) {
+        return {...user, ...updateUserDto};
+      }
+      return user;
+    });
+    return this.getUserById(id);
+  }
+
+  
 }
 
