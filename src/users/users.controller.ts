@@ -14,27 +14,19 @@ import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  // UsersService injectable class constructor 
   constructor(private readonly usersService: UsersService) {}
 
-  // GET all users
-  @Get()
-  getAllUsers() {
-    return this.usersService.getAllUsers();
-  }
-
   // GET user by full name
+  // OR GET all users
   // /users?name=jan%20kowalski
-  //filtering -> TODO - bugged
-  // @Get()
-  // getUserByName(@Query('name') name: string) {
-  //   return this.usersService.getUserByName(name);
-  // }
-  // route
-  // @Get('name/:name')
-  // getUserByName(@Query(':name') userName: string) {
-  //   return this.usersService.getUserByName(userName);
-  // }
+  @Get()
+  getUserByName(@Query('name') name?: string) {
+    if (name) {
+      return this.usersService.getUserByName(name);
+    } else {
+      return this.usersService.getAllUsers();
+    }
+  }
 
   // GET user by id
   @Get(':id')
