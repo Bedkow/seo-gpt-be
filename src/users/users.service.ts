@@ -29,7 +29,7 @@ export class UsersService {
     const user = this.users.find((user) => user.name == name);
 
     if (!user) {
-      return {error: 'user not found'};
+      throw new Error('User Not Found');
     } else {
       return user;
     }
@@ -41,7 +41,7 @@ export class UsersService {
     });
 
     if (!user) {
-      return {error: 'user not found'};
+      throw new Error('User Not found');
     } else {
       return user;
     }

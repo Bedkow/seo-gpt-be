@@ -3,10 +3,13 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -22,7 +25,11 @@ export class UsersController {
   @Get()
   getUserByName(@Query('name') name?: string) {
     if (name) {
-      return this.usersService.getUserByName(name);
+      try {
+        return this.usersService.getUserByName(name);
+      } catch (err) {
+        throw new NotFoundException(err.message);
+      }
     } else {
       return this.usersService.getAllUsers();
     }
@@ -30,13 +37,18 @@ export class UsersController {
 
   // GET user by id
   @Get(':id')
-  getUserById(@Param('id') id: string) {
-    return this.usersService.getUserById(id);
+  getUserById(@Param('id'/*, ParseUUIDPipe*/) id: string) {
+    try {
+      return this.usersService.getUserById(id);
+    } catch(err) {
+      throw new NotFoundException(err.message);
+    }
+    
   }
 
   // POST new user
   @Post()
-  createUser(@Body() createUserDto: CreateUserDto) {
+  createUser(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
     return this.usersService.createUser(createUserDto);
   }
 
