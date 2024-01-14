@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { User } from './schemas/user.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class UsersService {
@@ -20,6 +23,19 @@ export class UsersService {
       queriesTotal: 5,
     },
   ];
+  // schemas playground
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  
+  async createUser_S(createUserDto: CreateUserDto): Promise<User> {
+    const createdUser = new this.userModel(createUserDto);
+    return createdUser.save();
+  }
+
+  async getAllUsers_S(): Promise<User[]> {
+    return this.userModel.find().exec();
+  }
+  
+  //
 
   getAllUsers() {
     return this.users;
