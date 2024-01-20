@@ -7,6 +7,7 @@ export class CreateUserDto {
   name: string;
   @IsEnum(['none', 'copywriter', 'administrator'], {message: `Role should be 'none', 'copywriter', or 'administrator'`})
   role: 'none' | 'copywriter' | 'administrator';
+  password: string;
   queriesToday: number;
   queriesTotal: number;
 }

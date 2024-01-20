@@ -60,6 +60,10 @@ export class UsersController {
   // PUT update user role
   @Put(':id')
   updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    try {
     return this.usersService.updateUser(id, updateUserDto);
+    } catch (err) {
+      throw new NotFoundException(err.message);
+    }
   }
 }

@@ -16,6 +16,9 @@ export class User {
   role: 'none' | 'copywriter' | 'administrator';
 
   @Prop()
+  password: string;
+
+  @Prop()
   queriesToday: number;
 
   @Prop({immutable: true})
