@@ -5,7 +5,6 @@ import {
   Get,
   NotFoundException,
   Param,
-  ParseUUIDPipe,
   Post,
   Put,
   Query,

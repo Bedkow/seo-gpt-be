@@ -4,26 +4,11 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
+import { v4 as uuidv4 } from 'uuid'
 
 @Injectable()
 export class UsersService {
-  // private users = [
-  //   {
-  //     id: 'xyz-123',
-  //     name: 'jan kowalski',
-  //     role: 'copywriter',
-  //     queriesToday: 6,
-  //     queriesTotal: 48,
-  //   },
-  //   {
-  //     id: 'zzz-321',
-  //     name: 'żaneta pąkiewicz',
-  //     role: 'administrator',
-  //     queriesToday: 0,
-  //     queriesTotal: 5,
-  //   },
-  // ];
-  // schemas playground
+
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
   
   async getAllUsers(): Promise<User[]> {
@@ -32,16 +17,11 @@ export class UsersService {
   
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const createdUser = new this.userModel(createUserDto);
+    createdUser._id = uuidv4();
     return createdUser.save();
   }
-  //
-
-  // getAllUsers() {
-  //   return this.users;
-  // }
 
   async getUserByName(name: string) {
-    // const user = this.users.find((user) => user.name == name);
 
     const user = await this.userModel.findOne({_name: name})
 
@@ -53,9 +33,6 @@ export class UsersService {
   }
 
   async getUserById(userId: string) {
-    // const user = this.users.find((user) => {
-    //   return user.id === userId;
-    // });
 
     const user = await this.userModel.findOne({_userId: userId})
 
@@ -66,18 +43,9 @@ export class UsersService {
     }
   }
 
-  // createUser(createUserDto: CreateUserDto) {
-  //   this.users.push(createUserDto);
-  // }
-
   async removeUser(userId: string) {
-    // const toBeRemoved = this.getUserById(userId);
 
     const result = await this.userModel.deleteOne({_userId: userId})
-
-    // this.users = this.users.filter((user) => {
-    //   return user.id !== id;
-    // });
 
     return result;
   }
@@ -91,13 +59,5 @@ export class UsersService {
         return result
       }
     })
-
-    // this.users = this.users.map((user) => {
-    //   if (user.id === id) {
-    //     return { ...user, ...updateUserDto };
-    //   }
-    //   return user;
-    // });
-    // return this.getUserById(id);
   }
 }

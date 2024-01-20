@@ -1,7 +1,8 @@
 import { IsEnum, Length } from "class-validator";
+import { UUID } from "crypto";
 
 export class CreateUserDto {
-  id: string;
+  _id: UUID;
   @Length(3, 50)
   name: string;
   @IsEnum(['none', 'copywriter', 'administrator'], {message: `Role should be 'none', 'copywriter', or 'administrator'`})
